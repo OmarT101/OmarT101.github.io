@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Assignment 05 - Omar Torres</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.content-section {
+  display: none;
+  padding: 20px 16px;
+}
+
+.content-section.active {
+  display: block;
+}
+
+#passwordMessage {
+  font-weight: bold;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a class="active" data-tab="home" href="#home">Home</a>
+  <a data-tab="news" href="#news">News</a>
+  <a data-tab="course" href="#course">Course</a>
+  <a data-tab="window" href="#window">Window Size</a>
+  <a data-tab="browser" href="#browser">Browser</a>
+  <a data-tab="password" href="#password">Password</a>
+  <a data-tab="contact" href="#contact">Contact</a>
+  <a data-tab="about" href="#about">About</a>
+</div>
+
+<div id="home" class="content-section active">
+  <h2>Home</h2>
+  <p>Welcome to the Assignment 05 page.</p>
+</div>
+
+<div id="news" class="content-section">
+  <h2>News</h2>
+  <p>Latest updates will appear here.</p>
+</div>
+
+<div id="course" class="content-section">
+  <h2>Course</h2>
+  <ul>
+    <li><a href="https://gaia.cs.umass.edu/kurose_ross/index.php" target="_blank">Kurose and Ross Author/Book Page</a></li>
+    <li><a href="http://w3schools.com" target="_blank">W3Schools</a></li>
+    <li><a href="https://www.geeksforgeeks.org/web-development/" target="_blank">GeeksForGeeks - Web Development</a></li>
+  </ul>
+</div>
+
+<div id="window" class="content-section">
+  <h2>JavaScript Window</h2>
+  <p id="demo"></p>
+</div>
+
+<div id="browser" class="content-section">
+  <h2>Browser</h2>
+  <p><strong>Navigator</strong></p>
+  <ul>
+    <li>appName: navigator.appName</li>
+    <li>product: navigator.product</li>
+    <li>appVersion: navigator.appVersion</li>
+    <li>userAgent: navigator.userAgent</li>
+    <li>platform: navigator.platform</li>
+    <li>language: navigator.language</li>
+  </ul>
+  <p><strong>Window</strong></p>
+  <ul>
+    <li>innerHeight: window.innerHeight</li>
+    <li>innerWidth: window.innerWidth</li>
+  </ul>
+  <p><strong>Screen</strong></p>
+  <ul>
+    <li>width: screen.width</li>
+    <li>height: screen.height</li>
+    <li>availWidth: screen.availWidth</li>
+    <li>availHeight: screen.availHeight</li>
+    <li>colorDepth: screen.colorDepth</li>
+    <li>pixelDepth: screen.pixelDepth</li>
+  </ul>
+  <p><strong>Location</strong></p>
+  <ul>
+    <li>href: location.href</li>
+    <li>hostname: location.hostname</li>
+    <li>pathname: location.pathname</li>
+    <li>protocol: location.protocol</li>
+  </ul>
+</div>
+
+<div id="password" class="content-section">
+  <h2>Password</h2>
+  <p>The password is <em>cheese</em></p>
+  <input type="password" id="passwordInput" placeholder="Enter password">
+  <div id="passwordMessage"></div>
+</div>
+
+<div id="contact" class="content-section">
+  <h2>Contact</h2>
+  <p>You can contact me at <a href="mailto:omarstudent.10@gmail.com">omarstudent.10@gmail.com</a>.</p>
+</div>
+
+<div id="about" class="content-section">
+  <h2>About</h2>
+  <p>This page was developed by Omar Torres.</p>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.topnav a');
+const sections = document.querySelectorAll('.content-section');
+
+function updateWindowSize() {
+  const demo = document.getElementById("demo");
+  demo.innerHTML =
+    "Browser inner window width: " + window.innerWidth + "px<br>" +
+    "Browser inner window height: " + window.innerHeight + "px";
+}
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    tabs.forEach(t => t.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
+
+    tab.classList.add('active');
+
+    const tabName = tab.getAttribute('data-tab');
+    const activeSection = document.getElementById(tabName);
+    activeSection.classList.add('active');
+
+    if (tabName === 'window') {
+      updateWindowSize();
+    }
+  });
+});
+
+const passwordInput = document.getElementById('passwordInput');
+const passwordMessage = document.getElementById('passwordMessage');
+
+passwordInput.addEventListener('input', () => {
+  const val = passwordInput.value;
+  if (val === "cheese") {
+    passwordMessage.textContent = "Password is correct!";
+    passwordMessage.style.color = "green";
+  } else {
+    passwordMessage.textContent = "Password is incorrect!";
+    passwordMessage.style.color = "red";
+  }
+});
+</script>
+
+</body>
+</html>
