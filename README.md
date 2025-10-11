@@ -1,1 +1,1 @@
-This is a class project for CSCI 355
+This site was built for my CSCI 355 course, but I'm using it to hold and display projects from other classes.
