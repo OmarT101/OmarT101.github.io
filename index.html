@@ -56,6 +56,7 @@ body {
 <div class="topnav">
   <a class="active" data-tab="home" href="#home">Home</a>
   <a data-tab="course" href="#course">Course</a>
+  <a data-tab="projects" href ="#projects">Projects</a>
   <a data-tab="window" href="#window">Window Size</a>
   <a data-tab="browser" href="#browser">Browser</a>
   <a data-tab="password" href="#password">Password</a>
@@ -77,6 +78,425 @@ body {
   </ul>
 </div>
 
+<div id="projects" class="content-section">
+  <h2>CSCI 286 – Stock Trading Simulation (Java)</h2>
+  <p>This Java program simulates stock trading strategies using CSV data based on 20-day highs and lows.</p>
+
+  <p>
+    <a href="Data_compressed.zip" download>📦 Download Trading Data (ZIP)</a><br>
+    <small>Includes sample CSV files used by the trading simulator.</small>
+  </p>
+
+  <p>
+    <a href="Trading_program.zip" download>📁 Download Full Java Project (ZIP)</a>
+  </p>
+
+  <pre><code>
+
+//Direction.java
+package mac286.Project;
+
+public enum Direction {
+	LONG, SHORT, NONE;
+}
+
+    
+//---------------------------------------------------------------------------------------------------------
+//Bar.java
+package mac286.Project;
+
+public class Bar {
+	private String Date;
+	private float open;
+	private float high;
+	private float low, close, adjClose;
+	private long volume;
+	public Bar(String st) {
+		String[] stAr = st.split(","); 
+		if(stAr.length != 7) {
+			System.out.println("Problem in bar");
+			return;
+		}
+		//Each index represents the column of the file
+		//Parse = turning a string into a float
+		Date = stAr[0];
+		open = Float.parseFloat(stAr[1]);
+		high = Float.parseFloat(stAr[2]);
+		low = Float.parseFloat(stAr[3]);
+		close = Float.parseFloat(stAr[4]);
+		adjClose = Float.parseFloat(stAr[5]);
+		volume = Long.parseLong(stAr[6]);
+		
+	}
+	public float range() {
+		return (this.high - this.low);
+	}
+	public String getDate() {
+		return Date;
+	}
+	public void setDate(String date) {
+		Date = date;
+	}
+	public float getOpen() {
+		return open;
+	}
+	public void setOpen(float open) {
+		this.open = open;
+	}
+	public float getHigh() {
+		return high;
+	}
+	public void setHigh(float high) {
+		this.high = high;
+	}
+	public float getLow() {
+		return low;
+	}
+	public void setLow(float low) {
+		this.low = low;
+	}
+	public float getClose() {
+		return close;
+	}
+	public void setClose(float close) {
+		this.close = close;
+	}
+	public float getAdjClose() {
+		return adjClose;
+	}
+	public void setAdjClose(float adjClose) {
+		this.adjClose = adjClose;
+	}
+	public long getVolume() {
+		return volume;
+	}
+	public void setVolume(long volume) {
+		this.volume = volume;
+	}
+	public String toString() {
+		String st = this.Date + ", " + open + ", " + high + ", " + low + ", "+ close + ", " + adjClose + ", " + volume;
+		return st;
+	}
+}
+
+
+//---------------------------------------------------------------------------------------------------------
+//SymbolTester.java
+package mac286.Project;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Vector;
+
+public class SymbolTester {
+	private float riskFactor;
+	private String symbol;
+	private String dataPath;
+	
+	private Vector<Bar> mData;
+	private Vector<Trade> mTrades;
+	private boolean Dataload = false;
+	
+	//constructor
+	SymbolTester(String s, String p, float risk) {
+		riskFactor = risk;
+		symbol = s;
+		dataPath = p;
+		mData = new Vector<Bar>(3000);
+		mTrades = new Vector<Trade>(200);
+	}
+	//The only getter for the trade, the others you receive
+public Vector<Trade> getTrades(){
+		return mTrades;
+	}
+	//load the data
+public void loadData() {
+		//create file name
+		String fileName = dataPath + symbol + "_Daily.csv";
+		try {
+		FileReader fr = new FileReader(fileName);
+		BufferedReader br = new BufferedReader(fr);
+		String line = br.readLine();
+		while((line = br.readLine()) != null) {
+			//create a bar using the constructor that accepts line
+			Bar b = new Bar(line);
+			//add the bar to the vector
+			mData.add(b);
+		}
+		Dataload = true;
+		br.close();
+		fr.close();
+		}catch(IOException e){
+			System.out.println("Error: " + e.getMessage()); 
+			Dataload = false;
+			return;
+		}
+	}
+	//this is to make sure that each bar is lower than the previous
+	private boolean XDaysLow(int ind, int days) {
+		for(int i = ind-1; i > ind-days; i--) {
+			if(mData.elementAt(i).getLow() < mData.elementAt(ind).getLow())
+				return false;
+		}
+		return true;
+	}
+	private boolean XDaysHigh(int ind, int days) {
+		for(int i = ind-1; i > ind-days; i--) {
+			if(mData.elementAt(i).getHigh() > mData.elementAt(ind).getHigh())
+				return false;
+		}
+		return true;
+	}
+	void outcomes(Trade T, int ind) {
+		for(int i = ind; i < mData.size(); i++) {
+			if(T.getDir() == Direction.LONG) { //if todays high is higher than the target ,then we won
+				if(mData.elementAt(i).getHigh() > T.getTarget()) {
+					//consider a gap day, 
+					if(mData.elementAt(i).getOpen() > T.getTarget()) { 
+						//close at open a gap day
+						T.close(mData.elementAt(i).getDate(), mData.elementAt(i).getOpen(), i-ind);
+						return;
+					} else {
+						//close the trade at target
+						T.close(mData.elementAt(i).getDate(), T.getTarget(), i-ind);// number of days you stayed in the trade
+						return;
+					}
+					//if the todays low is lower than stop loss, then its a lost
+				} else if(mData.elementAt(i).getLow() < T.getStopLoss()) {
+					//check if there is a gap down
+					if(mData.elementAt(i).getOpen() < T.getStopLoss()) {
+						//get out at open
+						T.close(mData.elementAt(i).getDate(), mData.elementAt(i).getOpen(), i-ind);
+						return;
+					} else {
+						//get out of stop loss
+						T.close(mData.elementAt(i).getDate(), T.getStopLoss(), i-ind);
+						return;
+					}
+				}
+			}else { 
+				//short trade
+				if(mData.elementAt(i).getLow() <= T.getTarget()) { //this is for the win
+					//a gap day
+					if(mData.elementAt(i).getOpen() < T.getTarget()) {
+						//close at gap day
+						T.close(mData.elementAt(i).getDate(), mData.elementAt(i).getOpen(), i-ind);
+						return;
+					} else {
+						//close trade at target
+						T.close(mData.elementAt(i).getDate(), T.getTarget(), i-ind);
+						return;
+						}
+					} else if(mData.elementAt(i).getHigh() >= T.getStopLoss()){
+						//gap down
+						if(mData.elementAt(i).getOpen() > T.getStopLoss()) {
+							//close at open
+							T.close(mData.elementAt(i).getDate(), mData.elementAt(i).getOpen(), i-ind);
+							return;
+						} else {
+							//out of stop loss
+							T.close(mData.elementAt(i).getDate(), T.getStopLoss(), i-ind);
+							return;
+						}
+					}
+				}
+			}
+		 // end of for loop
+		//if we get here the trade is not closed, close it at the close of the last day
+		T.close(mData.elementAt(mData.size()-1).getDate(), mData.elementAt(mData.size()-1).getClose(), mData.size()-1-ind);
+	} 
+	public boolean test() {
+		if(!Dataload) { //if data load is not false, loadData()
+			loadData();
+			if (!Dataload) {
+				System.out.println("Data Not Loaded");
+				return false;
+			}
+		} 
+		
+		//display
+		//Today(i) makes 20 days low
+		for(int i = 20; i < mData.size()-1; i++) { // Long Trade
+			if(XDaysLow(i,20) 
+					&& mData.elementAt(i).getOpen() < mData.elementAt(i-1).getLow() //today open lower than low of previous
+					&& mData.elementAt(i).getClose() > mData.elementAt(i-1).getClose() //today close higher than previous day
+					&& mData.elementAt(i-1).getClose() < mData.elementAt(i-1).getOpen())  //yesterday close lower than yesterday open
+			{
+				//we have a trade, buy next day at open, stop loss at todays low
+				float entryprice = mData.elementAt(i+1).getOpen();
+				float stoploss = mData.elementAt(i).getLow() - 0.01f; //0.01 to get past the low
+				float risk = entryprice - stoploss;
+				float target = entryprice + riskFactor * risk;
+				Trade T = new Trade();
+				T.open(symbol, mData.elementAt(i+1).getDate(), entryprice, stoploss, target, Direction.LONG);
+				outcomes(T, i+1);
+				mTrades.add(T);
+			} else if(XDaysHigh(i, 20) //short Trade
+					&& mData.elementAt(i).getOpen() > mData.elementAt(i-1).getHigh() 
+					&& mData.elementAt(i).getClose() < mData.elementAt(i-1).getClose()
+					&& mData.elementAt(i-1).getClose() > mData.elementAt(i-1).getOpen()) {
+				//we have a trade, buy next day at open, stop loss at todays high
+				float entryprice = mData.elementAt(i+1).getOpen(); 
+				float stoploss = mData.elementAt(i).getHigh() + 0.01f;
+				float risk = stoploss - entryprice;
+				float target = entryprice - riskFactor * risk;
+				Trade T = new Trade();
+				T.open(symbol, mData.elementAt(i+1).getDate(), entryprice, stoploss, target, Direction.SHORT);
+				outcomes(T, i+1);
+				//add the trade to the Trade vector
+				mTrades.add(T);
+			}
+				
+			
+		}
+		//for(int i = 0; i < 10; i++) {
+		 //System.out.println(mData.elementAt(i).toString());
+		//}
+		
+		return true;
+	}
+	
+	
+}
+
+
+
+//---------------------------------------------------------------------------------------------------------
+//Tester.java
+package mac286.Project;
+
+import java.util.Vector;
+
+public class Tester {
+
+		public static void main(String[] args) {
+			//create a symbol tester
+			Vector<Trade> Trades = new Vector<Trade>(3000);
+			float riskfactor = 2;
+			String symbol = "AAPL";
+			SymbolTester tester = new SymbolTester(symbol,"/Users/luismora/eclipse-workspace/mac286/Data/" , riskfactor);
+			tester.test();
+			Trades.addAll(tester.getTrades());
+			for(int i = 0; i <Trades.size(); i++) {
+				System.out.println(Trades.elementAt(i).toString());
+			}			
+		}
+}
+
+
+                         
+//---------------------------------------------------------------------------------------------------------
+//Trade.java
+package mac286.Project;
+
+public class Trade {
+	private String entryDate, exitDate, symbol;
+	private float entryPrice, exitPrice, stopLoss, Target;
+	private Direction Dir;
+	private int holdingPeriod;
+	public boolean isOn;
+	
+	//default constructor
+	public Trade() {
+		symbol = "";
+		entryDate = "";
+		entryPrice = 0;
+		stopLoss = 0; 
+		Target = 0;
+		holdingPeriod = 0;
+		isOn = false;
+		Dir = Direction.NONE;
+	}
+	//create a trade and open it
+	public void open(String s, String ED, float price, float loss, float target, Direction d) {
+		symbol = s;
+		entryDate = ED;
+		entryPrice = price;
+		stopLoss = loss; 
+		Target = target;
+		holdingPeriod = 0;
+		isOn = true;
+		Dir = d;
+		
+	}
+	//you close the trade
+	public void close(String Ed, float xPrice, int holdingP) {
+		exitPrice = xPrice;
+		exitDate = Ed;
+		holdingPeriod = holdingP;
+		isOn = false;
+	}
+	//Method to tell you whether the trade was a win or a lose in percentage
+	//If the result is negative then you lost, and vice versa.
+	public float percentPL() {
+		if(Dir == Direction.LONG) {
+			return (((exitPrice - entryPrice)/entryPrice)*100);
+		}else if (Dir == Direction.SHORT) {
+			return ((entryPrice - exitPrice)/entryPrice) *100;
+		}else {
+			System.out.println("We should never be here, something is wrong!");
+			return 0;
+		}
+	}
+	public String toString() {
+		String st = symbol+ ", " + entryDate + ", " + entryPrice + ", " + stopLoss + ", " + Target + ", " + Dir + ", " + exitDate +", " + exitPrice + ", " + holdingPeriod;
+		return st;
+	}
+	public int getHoldingPeriod() {
+		return holdingPeriod;
+	}
+	public void setHoldingPeriod(int holdingPeriod) {
+		this.holdingPeriod = holdingPeriod;
+	}
+	public String getEntryDate() {
+		return entryDate;
+	}
+	public void setEntryDate(String entryDate) {
+		this.entryDate = entryDate;
+	}
+	public String getExitDate() {
+		return exitDate;
+	}
+	public void setExitDate(String exitDate) {
+		this.exitDate = exitDate;
+	}
+	public float getEntryPrice() {
+		return entryPrice;
+	}
+	public void setEntryPrice(float entryPrice) {
+		this.entryPrice = entryPrice;
+	}
+	public float getExitPrice() {
+		return exitPrice;
+	}
+	public void setExitPrice(float exitPrice) {
+		this.exitPrice = exitPrice;
+	}
+	public float getStopLoss() {
+		return stopLoss;
+	}
+	public void setStopLoss(float stopLoss) {
+		this.stopLoss = stopLoss;
+	}
+	public float getTarget() {
+		return Target;
+	}
+	public void setTarget(float target) {
+		Target = target;
+	}
+	public Direction getDir() {
+		return Dir;
+	}
+	public void setDir(Direction dir) {
+		Dir = dir;
+	}
+
+}
+  </code></pre>
+</div>
+
+  
 <div id="window" class="content-section">
   <h2>JavaScript Window</h2>
   <p id="demo"></p>
