@@ -1,53 +1,86 @@
-# 🚀 Portfolio Projects – Java Backtesting Engine & Web Development Site
+# Omar Torres – Portfolio Projects
 
-Hi! My name is Omar Torres, I’m a Computer Science student currently pursuing my B.A. and building hands-on projects to strengthen my software development skills. Below are two of my main academic portfolio projects: a **Java trading backtesting engine** and an **interactive multi-section website** developed for my Web Development course.
+**Computer Science student** pursuing a B.A., building hands-on projects in software development.
 
----
-
-## 📈 Backtesting Engine (Java)
-
-A full Java-based backtesting sandbox that processes historical daily OHLC data and simulates a 20-day breakout strategy.
-
-### ✅ Features
-- Parses daily OHLC CSV rows into fully encapsulated `Bar` objects  
-- Identifies long/short signals using 20-day highs/lows with multi-step confirmation  
-- Opens trades at next-day open with **gap-aware** stop-loss and profit-target logic  
-- Tracks complete trade lifecycle: entry/exit dates, prices, direction, outcome, and holding period  
-- Modular OOP design using classes: **Bar**, **Trade**, **SymbolTester**  
-- Easy to adjust risk factors, strategy rules, and edge-case handling  
-- Designed as a sandbox for experimenting with trade execution behavior
-
+🌍 **Live Site:** [omart101.github.io](https://omart101.github.io/)
 
 ---
 
-## 🌐 Interactive Website (HTML/CSS/JavaScript)
+## Projects
 
-A responsive multi-section website built for **CSCI 355 – Internet & Web Technologies**.  
-The site demonstrates modern front-end fundamentals and integrates with the Java project above.
+### 📈 Java Backtesting Engine
+A modular Java backtesting sandbox that processes historical daily OHLC data and simulates a 20-day breakout trading strategy.
 
-### ✅ Features
-- Multi-section layout with a **dynamic navigation bar**  
-- Tabbed interface using **DOM manipulation**  
-- Interactive JavaScript features:
-  - Window size display
-  - Password validation
-  - Dynamic content change  
-- Clean, organized HTML structure using semantic tags  
-- Project download buttons and links to the Java backtester  
-- Built with **HTML5, CSS3, and vanilla JavaScript**
+**Key features:**
+- Parses daily OHLC CSV rows into encapsulated `Bar` objects
+- Identifies long/short signals using 20-day highs/lows with multi-step confirmation
+- Gap-aware stop-loss and profit-target logic at next-day open
+- Tracks full trade lifecycle: entry/exit dates, prices, direction, and holding period
+- Modular OOP design (`Bar`, `Trade`, `SymbolTester`)
+- Configurable risk factor for experimenting with strategy behavior
 
-### 🌍 Live Demo  
-**Visit the site:** https://omart101.github.io/
+**How to run:**
+1. Open the project in Eclipse or VS Code (with Java extension)
+2. Place your `SYMBOL_Daily.csv` file in the `java-backtester/data/` folder
+3. Update `DATA_PATH` in `Tester.java` to point to that folder
+4. Run `Tester.java`
 
----
-
-## 💻 Technologies Used
-- **Java**, OOP, File I/O, CSV parsing  
-- **HTML5**, **CSS3**, **JavaScript**  
-- Git & GitHub version control  
-- Eclipse / VS Code  
+CSV format expected: `Date, Open, High, Low, Close, AdjClose, Volume`
 
 ---
 
-If you're checking out this repository, feel free to explore the code, try out the website, and reach out with any questions!
+### 🌐 Interactive Website (HTML/CSS/JavaScript)
+A responsive multi-section portfolio site built for **CSCI 355 – Internet & Web Technologies**.
 
+**Key features:**
+- Tab-based navigation using DOM manipulation
+- Live window size display (updates on resize)
+- Dynamic browser/navigator/screen/location info
+- Password validation with real-time feedback
+- Clean semantic HTML5 structure, separated CSS and JS
+
+**How to open:**
+- Clone the repo and open `website/index.html` in any browser, or visit the live demo above.
+
+---
+
+## Technologies Used
+
+| Area | Tools |
+|---|---|
+| Backend / Logic | Java, OOP, File I/O, CSV parsing |
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| Tools | Git, GitHub, Eclipse, VS Code |
+
+---
+
+## Repository Structure
+
+```
+omar-portfolio/
+│
+├── README.md
+│
+├── website/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+└── java-backtester/
+    ├── src/
+    │   └── mac286/Project/
+    │       ├── Direction.java
+    │       ├── Bar.java
+    │       ├── Trade.java
+    │       ├── SymbolTester.java
+    │       └── Tester.java
+    └── data/
+        └── AAPL_Daily.csv
+```
+
+---
+
+## Contact
+
+📧 [omarstudent.10@gmail.com](mailto:omarstudent.10@gmail.com)  
+🐙 [github.com/omart101](https://github.com/omart101)

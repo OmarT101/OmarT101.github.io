@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Omar Torres – Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topnav" id="topnav">
+  <a class="active" data-tab="home"     href="#home">Home</a>
+  <a data-tab="course"   href="#course">Course</a>
+  <a data-tab="projects" href="#projects">Projects</a>
+  <a data-tab="window"   href="#window">Window Size</a>
+  <a data-tab="browser"  href="#browser">Browser</a>
+  <a data-tab="password" href="#password">Password</a>
+  <a data-tab="contact"  href="#contact">Contact</a>
+  <a data-tab="about"    href="#about">About</a>
+</div>
+
+<!-- HOME -->
+<div id="home" class="content-section active">
+  <h2>Welcome</h2>
+  <p>Hi! I'm <strong>Omar Torres</strong>, a Computer Science student pursuing my B.A. and building hands-on projects to strengthen my software development skills.</p>
+  <p>This site showcases two of my main academic portfolio projects: a Java trading backtesting engine and the interactive website you're browsing right now, built for CSCI 355 – Internet &amp; Web Technologies.</p>
+  <p>Use the navigation above to explore each section.</p>
+</div>
+
+<!-- COURSE -->
+<div id="course" class="content-section">
+  <h2>Course Resources</h2>
+  <ul>
+    <li><a href="https://gaia.cs.umass.edu/kurose_ross/index.php" target="_blank">Kurose &amp; Ross – Computer Networking Textbook</a></li>
+    <li><a href="https://w3schools.com" target="_blank">W3Schools</a></li>
+    <li><a href="https://www.geeksforgeeks.org/web-development/" target="_blank">GeeksForGeeks – Web Development</a></li>
+  </ul>
+</div>
+
+<!-- PROJECTS -->
+<div id="projects" class="content-section">
+  <h2>CSCI 286 – Stock Trading Backtester (Java)</h2>
+  <p>A full Java-based backtesting sandbox that processes historical daily OHLC data and simulates a 20-day breakout strategy. Built with modular OOP design using classes: <code>Bar</code>, <code>Trade</code>, and <code>SymbolTester</code>.</p>
+
+  <h3>Features</h3>
+  <ul>
+    <li>Parses daily OHLC CSV rows into encapsulated <code>Bar</code> objects</li>
+    <li>Identifies long/short signals using 20-day highs/lows with multi-step confirmation</li>
+    <li>Gap-aware stop-loss and profit-target logic</li>
+    <li>Tracks complete trade lifecycle: entry/exit dates, prices, direction, and holding period</li>
+  </ul>
+
+  <h3>Source Code</h3>
+  <p>
+    <a class="btn" href="https://github.com/omart101" target="_blank">View on GitHub</a>
+  </p>
+
+  <h3>Downloads</h3>
+  <p>
+    <a href="Data_compressed.zip" download>📦 Download Trading Data (ZIP)</a><br>
+    <small>Sample CSV files used by the trading simulator.</small>
+  </p>
+  <p>
+    <a href="Trading_program.zip" download>📁 Download Full Java Project (ZIP)</a>
+  </p>
+</div>
+
+<!-- WINDOW SIZE -->
+<div id="window" class="content-section">
+  <h2>Window Size</h2>
+  <p id="windowDisplay"></p>
+</div>
+
+<!-- BROWSER INFO -->
+<div id="browser" class="content-section">
+  <h2>Browser Information</h2>
+
+  <h3>Navigator</h3>
+  <ul id="navigatorList"></ul>
+
+  <h3>Window</h3>
+  <ul id="windowList"></ul>
+
+  <h3>Screen</h3>
+  <ul id="screenList"></ul>
+
+  <h3>Location</h3>
+  <ul id="locationList"></ul>
+</div>
+
+<!-- PASSWORD -->
+<div id="password" class="content-section">
+  <h2>Password Check</h2>
+  <p>Enter the secret password below:</p>
+  <input type="password" id="passwordInput" placeholder="Enter password">
+  <p id="passwordMessage"></p>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="content-section">
+  <h2>Contact</h2>
+  <p>Feel free to reach out: <a href="mailto:omarstudent.10@gmail.com">omarstudent.10@gmail.com</a></p>
+  <p><a href="https://github.com/omart101" target="_blank">github.com/omart101</a></p>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="content-section">
+  <h2>About</h2>
+  <p>This site was developed by <strong>Omar Torres</strong> for CSCI 355 – Internet &amp; Web Technologies.</p>
+  <p>Built with HTML5, CSS3, and vanilla JavaScript.</p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
